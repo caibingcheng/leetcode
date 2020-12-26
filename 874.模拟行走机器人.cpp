@@ -1,0 +1,19 @@
+/*
+ * @lc app=leetcode.cn id=874 lang=cpp
+ *
+ * [874] 模拟行走机器人
+ */
+
+// @lc code=start
+class Solution {
+public:
+    int robotSim(vector<int>& commands, vector<vector<int>>& obstacles) {
+        int cpos[2] = {0, 0};
+        for (int &c : commands)
+        {
+
+        }
+    }
+};
+// @lc code=end
+
