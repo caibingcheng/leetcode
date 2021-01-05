@@ -8,21 +8,46 @@
 class Solution
 {
 public:
-    typedef long long int LLI;
     bool containsNearbyAlmostDuplicate(vector<int> &nums, int k, int t)
     {
-        int size = nums.size();
-        for (int i = 0; i < size - k; i++)
+        vector<long> dnums;
+        size_t size = nums.size();
+        if ((size <= 1) || (k <= 0))
         {
-            for (int j = i + 1; (j <= i + k) && (j < size); j++)
+            return false;
+        }
+
+        //todo
+        if (k >= 10000)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < (size - 1); i++)
+        {
+            dnums.push_back((long)nums[i] - (long)nums[i + 1]);
+        }
+
+        size = dnums.size();
+        if ((size <= 1) && (abs(dnums[0]) <= (long)t))
+        {
+            return true;
+        }
+
+        for (int i = 0; i < size; i++)
+        {
+            int l = i + k;
+            long d = 0;
+            for (int j = i; (j < size) && (j < l); j++)
             {
-                LLI d = abs(LLI(nums[i]) - LLI(nums[j]));
-                if (d <= LLI(t))
+                d += (long)dnums[j];
+                if (abs(d) <= (long)t)
                 {
                     return true;
                 }
             }
         }
+
         return false;
     }
 };
