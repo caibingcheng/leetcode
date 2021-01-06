@@ -62,10 +62,12 @@ public:
         }
 
         vector<string> ret(k);
+        make_heap(topK, &topK[k], cmp2);
         for (int i = 0; i < k; i++)
         {
-            pop_heap(topK, &topK[k + 1 - i], cmp2);
-            ret[k - i - 1] = topK[0]->first;
+            int j = k + 1 - i;
+            ret[i] = topK[0]->first;
+            pop_heap(topK, &topK[j - 1], cmp2);
         }
 
         return ret;
