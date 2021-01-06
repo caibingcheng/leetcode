@@ -5,9 +5,11 @@
  */
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
-    vector<int> countSmaller(vector<int>& nums) {
+    vector<int> countSmaller(vector<int> &nums)
+    {
         vector<int> ls(nums.size());
         size_t size = nums.size() - 1;
 
@@ -37,74 +39,76 @@ public:
     }
 
 private:
-class MyStack {
-public:
-    /** Initialize your data structure here. */
-    MyStack(const int &size) {
-        m_size = size;
-        m_mem = new int[m_size];
-        m_top = 0;
-    }
-
-    ~MyStack() {
-        delete[] m_mem;
-        m_mem = nullptr;
-    }
-
-    /** Push element x onto stack. */
-    void push(int x) {
-        if (m_top >= m_size)
+    class MyStack
+    {
+    public:
+        /** Initialize your data structure here. */
+        MyStack(const int &size)
         {
-            resize();
+            m_size = size;
+            m_mem = new int[m_size];
+            m_top = 0;
         }
 
-        m_mem[m_top] = x;
-        m_top++;
-    }
-
-    /** Removes the element on top of the stack and returns that element. */
-    int pop() {
-        if (m_top > 0)
+        ~MyStack()
         {
-            m_top--;
+            delete[] m_mem;
+            m_mem = nullptr;
         }
-        return m_mem[m_top];
-    }
 
-    /** Get the top element. */
-    int top() {
-        int top = m_top;
-        if (top > 0)
+        /** Push element x onto stack. */
+        void push(int x)
         {
-            top--;
+            if (m_top >= m_size)
+            {
+                resize();
+            }
+
+            m_mem[m_top] = x;
+            m_top++;
         }
-        return m_mem[top];
-    }
 
-    int size() {
-        return m_top;
-    }
+        /** Removes the element on top of the stack and returns that element. */
+        int pop()
+        {
+            if (m_top > 0)
+            {
+                m_top--;
+            }
+            return m_mem[m_top];
+        }
 
-    /** Returns whether the stack is empty. */
-    bool empty() {
-        return (m_top == 0);
-    }
+        /** Get the top element. */
+        int top()
+        {
+            int top = m_top;
+            if (top > 0)
+            {
+                top--;
+            }
+            return m_mem[top];
+        }
 
-private:
-    int *m_mem = nullptr;
-    int m_size = 0;
-    int m_top = 0;
+        int size() { return m_top; }
 
-    void resize(){
-        int new_size = m_size * 1.5;
-        int *new_mem = new int[new_size];
-        memcpy(new_mem, m_mem, m_size * sizeof(int));
+        /** Returns whether the stack is empty. */
+        bool empty() { return (m_top == 0); }
 
-        delete[] m_mem;
-        m_mem = new_mem;
-        m_size = new_size;
-    }
-};
+    private:
+        int *m_mem = nullptr;
+        int m_size = 0;
+        int m_top = 0;
+
+        void resize()
+        {
+            int new_size = m_size * 1.5;
+            int *new_mem = new int[new_size];
+            memcpy(new_mem, m_mem, m_size * sizeof(int));
+
+            delete[] m_mem;
+            m_mem = new_mem;
+            m_size = new_size;
+        }
+    };
 };
 // @lc code=end
-
