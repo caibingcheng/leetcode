@@ -34,7 +34,6 @@ public:
             if (initK > 0)
             {
                 topK[k - initK] = it;
-                initK--;
             }
             else
             {
@@ -48,7 +47,7 @@ public:
                     pop_heap(topK, &topK[k + 1], cmp);
                 }
             }
-
+            initK--;
         }
 
         vector<int> ret(k);
