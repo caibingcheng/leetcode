@@ -9,35 +9,29 @@ class Solution {
 public:
     int nthUglyNumber(int n) {
         if (n <= 1)
-            return 1;
-
-        int m = 1, s = 1;
-        int mp = cm(s++);
-        while((m + mp) < n)
         {
-            m += mp;
-            mp = cm(s++);
+            return 1;
         }
-        s--;
 
-        auto max = [](const int &a, const int &b) -> int{
-            return (a > b) ? a : b;
+        auto min = [] (const int &a, const int &b) -> int {
+            return a < b ? a : b;
         };
 
-        int mn = n - m;
-        int i = max(s - mn + 1, 0);
-        int k = max(mn - s - 1, 0);
-        int j = max(mn - 1, 0);
+        int ans[n];
+        ans[0] = 1;
+        int i2 = 0, i3 = 0, i5 = 0;
+        for (int i = 1; i < n; i++)
+        {
+            int ai2 = ans[i2] * 2;
+            int ai3 = ans[i3] * 3;
+            int ai5 = ans[i5] * 5;
+            ans[i] = min(min(ai2, ai3), ai5);
+            if (ans[i] == ai2) i2++;
+            if (ans[i] == ai3) i3++;
+            if (ans[i] == ai5) i5++;
+        }
 
-        cout << mn << " " << m << " " << s << " " << i << " " << j << " " << k << endl;
-
-        return pow(2, i) * pow(3, j) * pow(5, k);
-    }
-
-private:
-    int cm(const int &m)
-    {
-        return ((m + 1) * (m + 2)) >> 1;
+        return ans[n - 1];
     }
 };
 // @lc code=end
