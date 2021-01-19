@@ -10,62 +10,80 @@ class Solution
 public:
     bool isValid(string s)
     {
-        if (s.empty() || (s.size() & 1))
-        {
-            return false;
-        }
-
-        bool ret = true;
-        stack<char> cs;
-        for (char &c : s)
-        {
-            if (isLeft(c))
+        const static char brackets_table[][2] = {
+            {'(', ')'},
+            {'[', ']'},
+            {'{', '}'}};
+        auto is_match = [=](const char &a, const char &b) -> bool {
+            bool match = false;
+            for (int i = 0; i < 3; i++)
             {
-                cs.push(c);
-            }
-            else if (isRight(c))
-            {
-                if (!cs.empty())
+                match = ((a == brackets_table[i][0]) && (b == brackets_table[i][1]));
+                if (match)
                 {
-                    if (!isMatch(cs.top(), c))
-                    {
-                        ret = false;
-                    }
-                    cs.pop();
+                    return match;
+                }
+            }
+            return match;
+        };
+        auto is_left = [=](const char &a) -> bool {
+            for (int i = 0; i < 3; i++)
+            {
+                if (a == brackets_table[i][0])
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+        auto is_right = [=](const char &a) -> bool {
+            for (int i = 0; i < 3; i++)
+            {
+                if (a == brackets_table[i][1])
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        stack<char> ss;
+        for (const char &c : s)
+        {
+            if (ss.empty())
+            {
+                if (is_left(c))
+                {
+                    ss.push(c);
+                    continue;
                 }
                 else
                 {
-                    ret = false;
+                    return false;
                 }
-                if (!ret)
+            }
+            else
+            {
+                if (is_left(c))
                 {
-                    break;
+                    ss.push(c);
+                    continue;
+                }
+                if (is_right(c))
+                {
+                    if (is_match(ss.top(), c))
+                    {
+                        ss.pop();
+                        continue;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
         }
-
-        if (!cs.empty())
-        {
-            ret = false;
-        }
-
-        return ret;
-    }
-
-private:
-    bool isLeft(const char &c)
-    {
-        return (c == '(') || (c == '[') || (c == '{');
-    }
-    bool isRight(const char &c)
-    {
-        return (c == ')') || (c == ']') || (c == '}');
-    }
-    bool isMatch(const char &a, const char &b)
-    {
-        return ((a == '(') && (b == ')')) ||
-               ((a == '[') && (b == ']')) ||
-               ((a == '{') && (b == '}'));
+        return ss.empty();
     }
 };
 // @lc code=end
