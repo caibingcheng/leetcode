@@ -19,20 +19,51 @@
 class Solution {
 public:
     vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> pre;
         if (!root)
         {
             return pre;
         }
 
-        pre.push_back(root->val);
-        preorderTraversal(root->left);
-        preorderTraversal(root->right);
+        stack<TreeNode *> open;
+        vector<TreeNode *> close;
+
+        auto is_visited = [&] (TreeNode * node) -> bool {
+            for (const auto cn : close)
+            {
+                if (cn == node)
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        open.push(root);
+        while(!open.empty())
+        {
+            TreeNode *top = open.top();
+            if (!is_visited(top))
+            {
+                close.emplace_back(top);
+                pre.emplace_back(top->val);
+            }
+            if (top->left && !is_visited(top->left))
+            {
+                open.push(top->left);
+            }
+            else if (top->right && !is_visited(top->right))
+            {
+                open.push(top->right);
+            }
+            else
+            {
+                open.pop();
+            }
+        }
 
         return pre;
     }
-
-private:
-    vector<int> pre;
 };
 // @lc code=end
 
