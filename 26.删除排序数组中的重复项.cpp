@@ -14,12 +14,14 @@ public:
             return 0;
         }
 
-        int pre = move(nums[0]);
+        int pre = nums[0];
         int ret = 1;
+        int pos = 1;
         for (int i = 1; i < size; i++)
         {
             if (nums[i] != pre)
             {
+                nums[pos++] = nums[i];
                 pre = nums[i];
                 ret++;
             }
