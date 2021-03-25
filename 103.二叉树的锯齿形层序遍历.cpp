@@ -22,45 +22,51 @@ public:
     vector<vector<int>> zigzagLevelOrder(TreeNode *root)
     {
         vector<vector<int>> result;
-        vector<TreeNode *> open;
-        vector<TreeNode *> close;
-
         if (root == nullptr)
         {
             return result;
         }
 
-        open.emplace_back(root);
+        stack<TreeNode *> right;
+        stack<TreeNode *> left;
+
+        right.push(root);
         bool sign = true;
-        while (!open.empty())
+        while (!right.empty() || !left.empty())
         {
-            vector<int> each;
-            for (auto &n : open)
+            vector<int> line;
+            while(!right.empty())
             {
-                each.emplace_back(n->val);
-                close.emplace_back(n);
+                TreeNode *n = right.top();
+                right.pop();
+
+                line.push_back(n->val);
+                if (n->left)
+                    left.push(n->left);
+                if (n->right)
+                    left.push(n->right);
             }
-            open.clear();
-            result.emplace_back(each);
-            for (auto &n : close)
+            if (!line.empty())
             {
-                if (sign)
-                {
-                    if (n->right)
-                        open.emplace_back(n->right);
-                    if (n->left)
-                        open.emplace_back(n->left);
-                }
-                else
-                {
-                    if (n->left)
-                        open.emplace_back(n->left);
-                    if (n->right)
-                        open.emplace_back(n->right);
-                }
+                result.push_back(line);
             }
-            close.clear();
-            sign = !sign;
+
+            line.clear();
+            while(!left.empty())
+            {
+                TreeNode *n = left.top();
+                left.pop();
+
+                line.push_back(n->val);
+                if (n->right)
+                    right.push(n->right);
+                if (n->left)
+                    right.push(n->left);
+            }
+            if (!line.empty())
+            {
+                result.push_back(line);
+            }
         }
 
         return result;
