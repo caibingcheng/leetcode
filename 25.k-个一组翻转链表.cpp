@@ -15,12 +15,15 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
+class Solution
+{
 public:
-    ListNode* reverseKGroup(ListNode* head, int k) {
+    ListNode *reverseKGroup(ListNode *head, int k)
+    {
+        if (k <= 1)
+            return head;
 
 
     }
 };
 // @lc code=end
-

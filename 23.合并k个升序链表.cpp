@@ -15,60 +15,57 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
+class Solution
+{
 public:
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-        bool is_all_empty = true;
-        for (ListNode* l : lists){
-            is_all_empty &= (l == nullptr);
-        }
-        if (is_all_empty)
-        {
-            return nullptr;
-        }
+    ListNode *mergeKLists(vector<ListNode *> &lists)
+    {
+        int k = lists.size();
+        vector<ListNode *> ktop;
+        ktop.reserve(k);
 
-        ListNode* p = nullptr;
-        ListNode** first = nullptr;
-        for (ListNode* l : lists)
-        {
-            if (!p && l)
-            {
-                p = l;
-                first = &l;
-            }
-            else if (l && l->val <= p->val)
-            {
-                p = l;
-                first = &l;
-            }
-        }
-        (*first) = (*first)->next;
+        auto cmp = [](const auto& p1, const auto& p2) {
+            bool sign = false;
+            if (p1->val < p2->val)
+                return sign;
+            else
+                return !sign;
+        };
 
-        ListNode* head = p;
-        while(!p)
-        {
-            ListNode** pre = &p;
-            for (ListNode* l : lists)
+        auto mv = [&ktop, &cmp]() {
+            ktop[0] = ktop[0]->next;
+            pop_heap(begin(ktop), end(ktop), cmp);
+            if (ktop.back() == nullptr)
             {
-                if (l && l->val <= (*pre)->val)
-                {
-                    pre = &l;
-                }
-            }
-            if (pre != &p)
-            {
-                p->next = *pre;
-                *pre = (*pre)->next;
+                ktop.pop_back();
             }
             else
             {
-                p->next = nullptr;
+                push_heap(begin(ktop), end(ktop), cmp);
             }
+
+        };
+
+        for (auto &l : lists)
+        {
+            if (l != nullptr)
+                ktop.push_back(l);
+        }
+        if (ktop.empty())
+            return nullptr;
+
+        make_heap(begin(ktop), end(ktop), cmp);
+        ListNode *p = ktop.front();
+        mv();
+        ListNode *head = p;
+        while (!ktop.empty())
+        {
+            p->next = ktop.front();
             p = p->next;
+            mv();
         }
 
         return head;
     }
 };
 // @lc code=end
-
