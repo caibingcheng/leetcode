@@ -20,39 +20,62 @@ public:
 
     string intToRoman(int num)
     {
-        ROMA roma[7] = {
+        ROMA roma[13] = {
             ROMA('I', 1, 0),
+            ROMA('Q', 4, 0),
             ROMA('V', 5, 0),
+            ROMA('W', 9, 0),
             ROMA('X', 10, 0),
+            ROMA('E', 40, 0),
             ROMA('L', 50, 0),
+            ROMA('R', 90, 0),
             ROMA('C', 100, 0),
+            ROMA('T', 400, 0),
             ROMA('D', 500, 0),
-            ROMA('M', 1000, 0)
+            ROMA('Y', 900, 0),
+            ROMA('M', 1000, 0),
         };
 
         int num_tmp = num;
-        for (int i = 6; i >= 0; i--)
+        for (int i = 12; i >= 0; i--)
         {
             roma[i].div = num_tmp / roma[i].val;
             num_tmp = num_tmp % roma[i].val;
         }
 
-        //每个div一定小于5
         string result = "";
-        for (int i = 6; i >= 0; i--)
+        auto update = [&result] (auto s, int cnt)
         {
-            int div = roma[i].div;
-            if ((div > 0) && (div < 4))
+            while(cnt-- > 0)
             {
-                for (int j = 0; j < div; j++)
-                {
-                    result += roma[i].c;
-                }
+                result += s;
             }
-            else if (div > 3)
+        };
+        for (int i = 12; i >= 0; i--)
+        {
+            switch(roma[i].c)
             {
-                result += roma[i].c;
-                result += roma[i + 1].c;
+                case 'Q':
+                    update("IV", roma[i].div);
+                    break;
+                case 'W':
+                    update("IX", roma[i].div);
+                    break;
+                case 'E':
+                    update("XL", roma[i].div);
+                    break;
+                case 'R':
+                    update("XC", roma[i].div);
+                    break;
+                case 'T':
+                    update("CD", roma[i].div);
+                    break;
+                case 'Y':
+                    update("CM", roma[i].div);
+                    break;
+                default:
+                    update(roma[i].c, roma[i].div);
+                    break;
             }
         }
 
